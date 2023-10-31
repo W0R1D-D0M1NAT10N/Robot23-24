@@ -8,23 +8,31 @@ import com.qualcomm.robotcore.hardware.*;
 
 public class DriverOp1 extends LinearOpMode {
     
-    DcMotor LMotor;
-    DcMotor RMotor;  
-
+    
 
 
     
     //DigitalChannel breakBeam;
-    float MaxSpeed = 1.0f;
+    float MaxSpeed = 2.0f;
     @Override
     
     public void runOpMode() throws InterruptedException
     {
+    DcMotor LMotor;
+    DcMotor RMotor;  
+    Servo SweepingDemon;
+    DcMotor ArmMotor;
         waitForStart();
         while (opModeIsActive()) {
             LMotor = hardwareMap.dcMotor.get("motorLeft");
             RMotor = hardwareMap.dcMotor.get("motorRight");
+            SweepingDemon = hardwareMap.servo.get("C_Servo");
 
+
+
+            
+
+            
             //breakBeam = hardwareMap.digitalChannel.get("Beam");
 
             DcMotor[] motors = {LMotor, RMotor};
@@ -36,8 +44,9 @@ public class DriverOp1 extends LinearOpMode {
             LMotor.setDirection(DcMotor.Direction.REVERSE);
             RMotor.setDirection(DcMotor.Direction.FORWARD);
 
+            Servo [] servos 
 
-        float LPwr=0, RPwr=0;
+        float LPwr=0, RPwr=0; 
         
         
         LPwr= gamepad1.left_stick_y*MaxSpeed+gamepad1.left_stick_x*MaxSpeed;
@@ -45,28 +54,61 @@ public class DriverOp1 extends LinearOpMode {
 
         if(gamepad1.left_stick_y>0)
         {
-            LPwr=MaxSpeed;
-            RPwr=MaxSpeed;
+            LPwr=MaxSpeed/2;
+            RPwr=MaxSpeed/2;
 
         }
         if(gamepad1.left_stick_y<0)
         {
-            LPwr=-MaxSpeed;
-            RPwr=-MaxSpeed;
+            LPwr=-MaxSpeed/2;
+            RPwr=-MaxSpeed/2;
 
         }
         if(gamepad1.left_stick_x>0)
         {
-            LPwr=MaxSpeed;
-            RPwr=-MaxSpeed;
+            LPwr=MaxSpeed/2;
+            RPwr=-MaxSpeed/2;
 
         }
         if(gamepad1.left_stick_x<0)
         {
-            LPwr=-MaxSpeed;
-            RPwr=MaxSpeed;
+            LPwr=-MaxSpeed/2;
+            RPwr=MaxSpeed/2;
         }
 
+
+        while(gamepad1.x){
+            DemonicSucker();
+        }
+        while(gampad1.right_bumper){
+            MotorUp();
+        }
+        while(gamepad1.left_bumper){
+            MotorDown();
+
+
+
+
+        public void DemonicSucker(){
+            SweepingDemon.setMode(Servo.RunMode.RUN_WITHOUT_ENCODER);
+            SweepingDemon.setPower(Maxspeed);
+        }
+        public void MotorUp(){
+            ArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            ArmMotor.setPower(.7f);
+        }
+        public void MotorDown(){
+            ArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            ArmMotor.setPower(-.7f);
+        }
+
+
+
+            
+
+
+
+            
         RMotor.setPower(RPwr);
         LMotor.setPower(LPwr);
         }
